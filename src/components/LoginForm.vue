@@ -1,20 +1,57 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
 import Button from "./Button.vue";
 import Loader from "./Loader.vue";
 import Input from "./Input.vue";
 import Label from "./Label.vue";
+import { z } from "zod";
+import { RouterLink } from "vue-router";
+import { useField, useForm } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import { LoginFormData } from "../types/login";
 import InputErrorMessage from "./InputErrorMessage.vue";
+
+const validationSchema = toTypedSchema(
+  z.object({
+    email: z
+      .string()
+      .min(1, "Este campo é obrigatório")
+      .email("Este campo precisa ser um email")
+      .default(""),
+    password: z
+      .string()
+      .min(1, "Este campo é obrigatório")
+      .min(8, "Sua senha tem no mínimo 8 caracteres")
+      .default(""),
+  })
+);
+
+const { handleSubmit, isSubmitting } = useForm<LoginFormData>({
+  validationSchema,
+});
+
+const { value: email, errorMessage: emailError } = useField<string>("email");
+const { value: password, errorMessage: passwordError} = useField<string>("password");
+
+const onSubmit = handleSubmit((data: LoginFormData) => {
+  console.log(data);
+});
 
 </script>
 
 <template>
-  <form data-testid="login-form" className="space-y-6" >
+  <form data-testid="login-form" className="space-y-6" @submit="onSubmit">
     <div>
       <Label htmlFor="email" text="Email" />
       <div className="mt-2">
-        <Input id="email" type="email" autoComplete="email" required/>
-        <InputErrorMessage :error="false" message="* Este campo é obrigatório" />
+        <Input
+          id="email"
+          v-model="email"
+          type="email"
+          name="email"
+          autoComplete="email"
+          :error="emailError"
+        />
+        <InputErrorMessage :error="emailError" />
       </div>
     </div>
 
@@ -31,18 +68,22 @@ import InputErrorMessage from "./InputErrorMessage.vue";
         </div>
       </div>
       <div className="mt-2">
-        <Input id="password" type="password" autoComplete="current-password" />
-        <InputErrorMessage
-          :error="false"
-          message="* Este campo é obrigatório"
+        <Input
+          id="password"
+          v-model="password"
+          type="password"
+          name="password"
+          autoComplete="current-password"
+          :error="passwordError"
         />
+        <InputErrorMessage :error="passwordError" />
       </div>
     </div>
 
     <div>
-      <Button type="submit" >
-        <Loader v-if="false" />
-        Entrar
+      <Button type="submit" :disabled="isSubmitting">
+        <Loader v-if="isSubmitting" />
+        <p v-if="!isSubmitting">Entrar</p>
       </Button>
     </div>
 

@@ -2,6 +2,7 @@
 import Logo from '../components/Logo.vue';
 import SignUpForm from '../components/SignUpForm.vue';
 </script>
+
 <template>
   <div
     data-testid="signup"

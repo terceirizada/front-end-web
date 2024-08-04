@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, LabelHTMLAttributes } from "vue";
+import { LabelHTMLAttributes } from "vue";
 
 interface LabelProps extends /*@vue-ignore*/ LabelHTMLAttributes {
   text: string;
@@ -8,7 +8,7 @@ interface LabelProps extends /*@vue-ignore*/ LabelHTMLAttributes {
 defineProps<LabelProps>();
 </script>
 <template>
-  <label className="block text-sm font-medium leading-6 text-gray-900">
+  <label className="block text-md font-medium leading-6 text-gray-900">
     {{ text }}
   </label>
 </template>

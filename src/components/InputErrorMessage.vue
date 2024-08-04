@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
-
-type InputErrorMessageProps = {
-  error: boolean,
-  message: string
-}
-
-defineProps<InputErrorMessageProps>()
-
+type InpurErrorProps = {
+  error: string | number | undefined;
+};
+defineProps<InpurErrorProps>();
 </script>
 
 <template>
-  <p v-if="error" class="text-red-500">{{ message }}</p>
+    <span v-if="error" class="text-sm text-red-500 font-bold">{{ error }}</span>
 </template>
