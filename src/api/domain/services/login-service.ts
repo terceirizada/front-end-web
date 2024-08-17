@@ -1,12 +1,9 @@
 import axios from "axios"
+import { LoginFormData } from "../../../types/login";
 
-export type SignInData = {
-    email: string
-    password: string
-}
 
-export class SignInService {
-    async execute(data: SignInData){
+export class LoginService {
+    async execute(data: LoginFormData){
         try{
             const reponse = await axios.post('/api/login', data);
             return reponse

@@ -4,11 +4,12 @@ import Loader from "./Loader.vue";
 import Input from "./Input.vue";
 import Label from "./Label.vue";
 import { z } from "zod";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import { useField, useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import { LoginFormData } from "../types/login";
 import InputErrorMessage from "./InputErrorMessage.vue";
+import { useAuth } from "../hooks/useAuth";
 
 const validationSchema = toTypedSchema(
   z.object({
@@ -32,9 +33,25 @@ const { handleSubmit, isSubmitting } = useForm<LoginFormData>({
 const { value: email, errorMessage: emailError } = useField<string>("email");
 const { value: password, errorMessage: passwordError} = useField<string>("password");
 
-const onSubmit = handleSubmit((data: LoginFormData) => {
-  console.log(data);
-});
+
+const auth = useAuth()
+const router = useRouter()
+
+
+const handleLogin = async (data: LoginFormData) => {
+  try {
+      const isLogged = await auth.logIn(data)
+      if(isLogged){
+        router.push('/flow')
+        alert('Login realizado com sucesso!')
+      }
+  } catch (error: any) {
+    alert(error.message)
+  }
+}
+
+const onSubmit = handleSubmit(handleLogin);
+
 
 </script>
 

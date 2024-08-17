@@ -9,6 +9,9 @@ import { SignUpFormData } from "../types/sign-up";
 import { isPasswordsMatching } from "../utils/is-password-matching";
 import InputErrorMessage from "./InputErrorMessage.vue";
 import Loader from "./Loader.vue";
+import { useRouter } from 'vue-router'
+import { AuthProps } from "../types/auth";
+import { useAuth } from "../hooks/useAuth";
 
 const validationSchema = toTypedSchema(
   z.object({
@@ -25,7 +28,7 @@ const validationSchema = toTypedSchema(
     confirmPassword: z
       .string()
       .min(1, "Este campo é obrigatório")
-      .min(8, "Sua senha tem no mínimo 8 caracteres")
+      .min(8, "Sua senha deve ter no mínimo 8 caracteres")
       .default(""),
   }).refine(data => isPasswordsMatching(data.password, data.confirmPassword), {
     path: ['confirmPassword'],
@@ -41,9 +44,24 @@ const { value: email, errorMessage: emailError } = useField<string>("email");
 const { value: password, errorMessage: passwordError } = useField<string>("password");
 const { value: confirmPassword, errorMessage: confirmPasswordError } = useField<string>("confirmPassword");
 
-const onSubmit = handleSubmit((data: SignUpFormData) => {
-  console.log(data);
-});
+const auth = useAuth()
+const router = useRouter()
+
+const handleSignUp = async (data: SignUpFormData) => {
+  try {
+      const isRegistered = await auth.signUp(data)
+      if(isRegistered){
+        router.push('/')
+        alert('Cadastro realizado com sucesso!')
+      }
+  } catch (error: any) {
+    alert(error.message)
+  }
+}
+
+const onSubmit = handleSubmit(handleSignUp);
+
+
 </script>
 
 <template>
