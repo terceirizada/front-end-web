@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import App from "../App.vue";
-import Login from "../views/Login.vue";
-import SignUp from "../views/SignUp.vue";
+import LoginView from "../views/LoginView.vue";
+import SignUpView from "../views/SignUpView.vue";
 import ProcessesTable from "../components/ProcessesTable.vue";
 import NotFound from "../views/NotFound.vue";
 import { AuthProps } from "../types/auth";
@@ -20,12 +20,12 @@ const router = createRouter({
                 {
                     path: '/',
                     name: 'login',
-                    component: Login,
+                    component: LoginView,
                 },
                 {
                     path: '/register',
                     name: 'register',
-                    component: SignUp
+                    component: SignUpView
                 },
                 {
                     path: '/flow',

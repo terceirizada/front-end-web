@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import Label from "./Label.vue";
-import Input from "./Input.vue";
-import Button from "./Button.vue";
+import FormLabel from "./FormLabel.vue";
+import FormInput from "./FormInput.vue";
+import PrimaryButton from "./PrimaryButton.vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { z } from "zod";
 import { useField, useForm } from "vee-validate";
 import { SignUpFormData } from "../types/sign-up";
 import { isPasswordsMatching } from "../utils/is-password-matching";
 import InputErrorMessage from "./InputErrorMessage.vue";
-import Loader from "./Loader.vue";
+import SpinnerLoader from "./SpinnerLoader.vue";
 import { useRouter } from 'vue-router'
-import { AuthProps } from "../types/auth";
 import { useAuth } from "../hooks/useAuth";
 
 const validationSchema = toTypedSchema(
@@ -54,7 +53,7 @@ const handleSignUp = async (data: SignUpFormData) => {
         router.push('/')
         alert('Cadastro realizado com sucesso!')
       }
-  } catch (error: any) {
+  } catch (error) {
     alert(error.message)
   }
 }
@@ -67,9 +66,9 @@ const onSubmit = handleSubmit(handleSignUp);
 <template>
   <form data-testid="login-form" className="space-y-6" @submit="onSubmit">
     <div>
-      <Label htmlFor="email" text="Email" />
+      <FormLabel htmlFor="email" text="Email" />
       <div className="mt-2">
-        <Input
+        <FormInput
           v-model="email"
           id="email"
           type="email"
@@ -82,9 +81,9 @@ const onSubmit = handleSubmit(handleSignUp);
     </div>
 
     <div>
-      <Label htmlFor="password" text="Senha" />
+      <FormLabel htmlFor="password" text="Senha" />
       <div className="mt-2">
-        <Input
+        <FormInput
           v-model="password"
           data-testid="password"
           id="password"
@@ -97,9 +96,9 @@ const onSubmit = handleSubmit(handleSignUp);
     </div>
 
     <div>
-      <Label htmlFor="confirmPassword" text="Confirme a senha" />
+      <FormLabel htmlFor="confirmPassword" text="Confirme a senha" />
       <div className="mt-2">
-        <Input
+        <FormInput
           v-model="confirmPassword"
           data-testid="confirmPassword"
           id="confirmPassword"
@@ -112,10 +111,9 @@ const onSubmit = handleSubmit(handleSignUp);
     </div>
 
     <div>
-      <Button type="submit" :disabled="isSubmitting">
-        <Loader v-if="isSubmitting" />
-        <p v-if="!isSubmitting">Entrar</p>
-      </Button>
+      <PrimaryButton type="submit" :title="isSubmitting ? '' : 'Cadastrar'" :disabled="isSubmitting">
+        <SpinnerLoader v-if="isSubmitting" />
+      </PrimaryButton>
     </div>
 
     <p className="mt-10 text-center text-sm text-gray-500">
