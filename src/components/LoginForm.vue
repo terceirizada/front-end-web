@@ -39,8 +39,10 @@ const router = useRouter()
 
 
 const handleLogin = async (data: LoginFormData) => {
+  
   try {
       const isLogged = await auth.logIn(data)
+      
       if(isLogged){
         router.push('/flow')
         alert('Login realizado com sucesso!')
