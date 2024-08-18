@@ -2,10 +2,10 @@
 import { ButtonHTMLAttributes } from "vue";
 
 interface ButtonProps extends /* @vue-ignore */ ButtonHTMLAttributes {
+  title: string;
 }
 
 defineProps<ButtonProps>();
-
 </script>
 <template>
   <button
@@ -14,6 +14,6 @@ defineProps<ButtonProps>();
             focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
             focus-visible:outline-indigo-600 disabled:bg-indigo-400"
   >
-    <slot></slot>
+    <slot>{{ title }}</slot>
   </button>
 </template>

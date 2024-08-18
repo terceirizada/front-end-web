@@ -48,7 +48,7 @@ function togglePerson(person: Person) {
   }
 }
 
-function classNames(...classes: any[]) {
+function classNames(...classes: []) {
   return classes.filter(Boolean).join(" ");
 }
 </script>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AlertTriangle } from 'lucide-vue-next';
-import Button from '../components/Button.vue';
+import PrimaryButton from '../components/PrimaryButton.vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
@@ -15,9 +15,9 @@ const goBack = () => router.go(-1)
         </h1>
         <p class="text-xl mb-5">A página ou recurso não existe.</p>
         <RouterLink to="#" @click.prevent="goBack">
-            <Button>
+            <PrimaryButton>
                 Voltar
-            </Button>
+            </PrimaryButton>
         </RouterLink>
     </section>
 </template>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Button from "./Button.vue";
-import Loader from "./Loader.vue";
-import Input from "./Input.vue";
-import Label from "./Label.vue";
+import PrimaryButton from "./PrimaryButton.vue";
+import SpinnerLoader from "./SpinnerLoader.vue";
+import FormInput from "./FormInput.vue";
+import FormLabel from "./FormLabel.vue";
 import { z } from "zod";
 import { RouterLink, useRouter } from "vue-router";
 import { useField, useForm } from "vee-validate";
@@ -31,36 +31,34 @@ const { handleSubmit, isSubmitting } = useForm<LoginFormData>({
 });
 
 const { value: email, errorMessage: emailError } = useField<string>("email");
-const { value: password, errorMessage: passwordError} = useField<string>("password");
+const { value: password, errorMessage: passwordError } =
+  useField<string>("password");
 
-
-const auth = useAuth()
-const router = useRouter()
-
+const auth = useAuth();
+const router = useRouter();
 
 const handleLogin = async (data: LoginFormData) => {
   try {
-      const isLogged = await auth.logIn(data)
-      if(isLogged){
-        router.push('/flow')
-        alert('Login realizado com sucesso!')
-      }
-  } catch (error: any) {
-    alert(error.message)
+    const isLogged = await auth.logIn(data);
+
+    if (isLogged) {
+      router.push("/flow");
+      alert("Login realizado com sucesso!");
+    }
+  } catch (error) {
+    alert(error.message);
   }
-}
+};
 
 const onSubmit = handleSubmit(handleLogin);
-
-
 </script>
 
 <template>
   <form data-testid="login-form" className="space-y-6" @submit="onSubmit">
     <div>
-      <Label htmlFor="email" text="Email" />
+      <FormLabel htmlFor="email" text="Email" />
       <div className="mt-2">
-        <Input
+        <FormInput
           id="email"
           v-model="email"
           type="email"
@@ -74,7 +72,7 @@ const onSubmit = handleSubmit(handleLogin);
 
     <div>
       <div className="flex items-center justify-between">
-        <Label htmlFor="password" text="Senha" />
+        <FormLabel htmlFor="password" text="Senha" />
         <div className="text-sm">
           <a
             href="#"
@@ -85,7 +83,7 @@ const onSubmit = handleSubmit(handleLogin);
         </div>
       </div>
       <div className="mt-2">
-        <Input
+        <FormInput
           id="password"
           v-model="password"
           type="password"
@@ -98,10 +96,9 @@ const onSubmit = handleSubmit(handleLogin);
     </div>
 
     <div>
-      <Button type="submit" :disabled="isSubmitting">
-        <Loader v-if="isSubmitting" />
-        <p v-if="!isSubmitting">Entrar</p>
-      </Button>
+      <PrimaryButton type="submit" :title="isSubmitting ? '' : 'Entrar'" :disabled="isSubmitting">
+        <SpinnerLoader v-if="isSubmitting" />
+      </PrimaryButton>
     </div>
 
     <p className="mt-10 text-center text-sm text-gray-500">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { InputHTMLAttributes, Ref } from 'vue';
+import { InputHTMLAttributes } from 'vue';
 
 interface InputProps extends /* @vue-ignore */ InputHTMLAttributes {
   modelValue: string | number | undefined
