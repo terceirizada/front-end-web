@@ -7,6 +7,8 @@ import NotFound from "../views/NotFound.vue";
 import { AuthProps } from "../types/auth";
 import { useAuth } from "../hooks/useAuth";
 
+
+
 const router = createRouter({
     history: createWebHistory(),
     routes: [
