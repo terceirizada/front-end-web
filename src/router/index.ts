@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import App from "../App.vue";
 import LoginView from "../views/LoginView.vue";
 import SignUpView from "../views/SignUpView.vue";
-import ProcessesTable from "../components/ProcessesTable.vue";
-import NotFound from "../views/NotFound.vue";
+import ProcessesDashboard from "../components/ProcessesDashboard.vue";
+import NotFoundView from "../views/NotFoundView.vue";
 import { AuthProps } from "../types/auth";
 import { useAuth } from "../hooks/useAuth";
 
@@ -30,7 +30,7 @@ const router = createRouter({
                 {
                     path: '/flow',
                     name: 'processes-table',
-                    component: ProcessesTable,
+                    component: ProcessesDashboard,
                     meta: {
                         requiresAuth: true
                     }
@@ -38,7 +38,7 @@ const router = createRouter({
                 {
                     path: '/:catchAll(.*)',
                     name: 'not-found',
-                    component: NotFound
+                    component: NotFoundView
                 }
             ]
         },
@@ -50,7 +50,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const auth: AuthProps = useAuth()
     
-    if (to.meta.requiresAuth && !auth.isAuthenticated.value) {
+    if (to.meta.requiresAuth && !!auth.isAuthenticated.value) {
         next({
             path: '/',
             query: { redirect: to.fullPath },

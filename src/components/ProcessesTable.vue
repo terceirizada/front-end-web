@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Plus } from "lucide-vue-next";
 import { ref, watch } from "vue";
 
 type Person = {
@@ -10,10 +11,10 @@ type Person = {
 
 const people: Person[] = [
   {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
+    name: "Contratar fulano",
+    title: "Pendente",
+    email: "aqui vai alguma informação",
+    role: "aqui vai outra",
   },
 ];
 
@@ -48,29 +49,22 @@ function togglePerson(person: Person) {
   }
 }
 
-function classNames(...classes: []) {
+function classNames(...classes: unknown[]) {
   return classes.filter(Boolean).join(" ");
 }
 </script>
 
 <template>
-    <div data-testid="flow" class="px-4 sm:px-6 lg:px-8">
-      <div class="sm:flex sm:items-center">
-        <div class="sm:flex-auto">
-          <h1 class="text-base font-semibold leading-6 text-gray-900">Users</h1>
-          <p class="mt-2 text-sm text-gray-700">
-            A list of all the users in your account including their name, title, email and role.
-          </p>
-        </div>
-        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+    <div data-testid="flow" class="py-4 sm:px-6 lg:px-8 bg-white rounded-lg border-2 border-neutral-300">
+        <div class="mt-4 sm:mt-0 sm:flex-none">
           <button
-            type="button"
-            class="block rounded-md bg-indigo-600 px-3 py-1.5 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          type="button"
+          class=" flex gap-1 rounded-md bg-indigo-600 px-3 py-1.5 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600/"
           >
-            Add user
+          <Plus :size="24"/>
+          Novo
           </button>
         </div>
-      </div>
       <div class="mt-8 flow-root">
         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -80,13 +74,13 @@ function classNames(...classes: []) {
                   type="button"
                   class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                 >
-                  Bulk edit
+                  Editar
                 </button>
                 <button
                   type="button"
                   class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                 >
-                  Delete all
+                  Excluir
                 </button>
               </div>
               <table class="min-w-full table-fixed divide-y divide-gray-300">
@@ -101,12 +95,12 @@ function classNames(...classes: []) {
                         @change="toggleAll"
                       />
                     </th>
-                    <th scope="col" class="min-w-[12rem] py-3.5 pr-3 text-left text-sm font-semibold text-gray-900">Name</th>
-                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Title</th>
-                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
-                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Role</th>
+                    <th scope="col" class="min-w-[12rem] py-3.5 pr-3 text-left text-sm font-semibold text-gray-900">Nome</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Alguma coisa</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Outra coisa n sei</th>
                     <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
-                      <span class="sr-only">Edit</span>
+                      <span class="sr-only">Editar</span>
                     </th>
                   </tr>
                 </thead>
