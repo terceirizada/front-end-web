@@ -2,5 +2,5 @@
 import ProcessesDashboard from '../components/ProcessesDashboard.vue';
 </script>
 <template>
-    <ProcessesDashboard />
+    <ProcessesDashboard data-testid="main"/>
 </template>

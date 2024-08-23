@@ -46,6 +46,7 @@ const handleLogin = async (data: LoginFormData) => {
       alert("Login realizado com sucesso!");
     }
   } catch (error) {
+    if(error instanceof Error)
     alert(error.message);
   }
 };

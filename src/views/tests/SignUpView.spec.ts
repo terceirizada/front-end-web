@@ -7,7 +7,7 @@ import router from '../../router'
 describe('SignUpView', () => {
     it('should render', () => {
         render(SignUpView, {global: { plugins: [router]} })
-        const component = screen.getByTestId("signup-view")
+        const component = screen.getByTestId("signup")
         expect(component).toBeTruthy()
     })
 })

@@ -6,7 +6,7 @@ import router from "../../router";
 describe('NotFoundView', () => {
     it('should render', () =>{
         render(NotFoundView, {global: { plugins: [router]} })
-        const component = screen.getByTestId("notfound-view")
+        const component = screen.getByTestId("notfound")
         expect(component).toBeTruthy()
     })
 })

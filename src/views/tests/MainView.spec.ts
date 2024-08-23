@@ -6,7 +6,7 @@ import router from "../../router";
 describe('MainView', () => {
     it('should render', () =>{
         render(MainView, {global: { plugins: [router]} })
-        const component = screen.getByTestId("mainview-view")
+        const component = screen.getByTestId("main")
         expect(component).toBeTruthy()
     })
 })

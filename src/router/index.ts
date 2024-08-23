@@ -2,11 +2,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import App from "../App.vue";
 import LoginView from "../views/LoginView.vue";
 import SignUpView from "../views/SignUpView.vue";
-import ProcessesDashboard from "../components/ProcessesDashboard.vue";
+import MainView from "../views/MainView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 import { AuthProps } from "../types/auth";
 import { useAuth } from "../hooks/useAuth";
-
 
 
 const router = createRouter({
@@ -29,8 +28,8 @@ const router = createRouter({
                 },
                 {
                     path: '/flow',
-                    name: 'processes-table',
-                    component: ProcessesDashboard,
+                    name: 'main-view',
+                    component: MainView,
                     meta: {
                         requiresAuth: true
                     }

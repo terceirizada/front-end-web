@@ -39,7 +39,7 @@ const userNavigation = [
           >
             <div class="flex items-center px-2 lg:px-0">
               <div class="flex-shrink-0">
-                <AppLogo :height="16"/>
+                <AppLogo />
               </div>
               <div class="hidden lg:ml-10 lg:block">
                 <div class="flex space-x-4">

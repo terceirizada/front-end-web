@@ -54,6 +54,7 @@ const handleSignUp = async (data: SignUpFormData) => {
         alert('Cadastro realizado com sucesso!')
       }
   } catch (error) {
+    if (error instanceof Error)
     alert(error.message)
   }
 }

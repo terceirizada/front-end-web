@@ -8,7 +8,7 @@ const goBack = () => router.go(-1)
 
 </script>
 <template>
-    <section data-testid="notfound-view" class="text-center flex flex-col items-center">
+    <section data-testid="notfound" class="text-center flex flex-col items-center">
         <AlertTriangle :size="90" color="red"/>
         <h1 class="text-6xl font-bold">
             404 Not Found
