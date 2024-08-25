@@ -4,7 +4,7 @@ import LoginView from "../views/LoginView.vue";
 import SignUpView from "../views/SignUpView.vue";
 import MainView from "../views/MainView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
-import { AuthProps } from "../types/auth";
+import { AuthHookProps } from "../types/auth-hook";
 import { useAuth } from "../hooks/useAuth";
 
 
@@ -47,7 +47,7 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-    const auth: AuthProps = useAuth()
+    const auth: AuthHookProps = useAuth()
     
     if (to.meta.requiresAuth && !auth.isAuthenticated.value) {
         next({
