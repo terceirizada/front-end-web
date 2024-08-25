@@ -6,29 +6,29 @@ import { LoginFormData } from "../types/login";
 import { LoginService } from "../api/domain/services/login-service";
 import { User } from "../types/user";
 import { AuthToken } from "../types/auth-token";
+import { APIResponse } from "../types/api";
 
 
 export const useAuth = (): AuthHookProps => {
     const user = ref<User | null>(null!);
     const isAuthenticated = computed(() => !!user.value)
 
-    const signUp = async (data: SignUpFormData) => {
+    const signUp = async (data: SignUpFormData): Promise<boolean> => {
         const signUpService = new SignUpService();
-        const registry = await signUpService.execute<User>(data);
+        const registry: APIResponse<User> = await signUpService.execute(data);
 
         const registeredUser = registry.data;
 
         return registeredUser ? true : false;
     };
 
-    const logIn = async (data: LoginFormData) => {
+    const logIn = async (data: LoginFormData): Promise<boolean> => {
         const loginService = new LoginService();
-        const login = await loginService.execute<AuthToken>(data);
+        const login: APIResponse<AuthToken> = await loginService.execute(data);
 
-        const { user: loggedUser, token } = login.data
+        const { token } = login.data
 
-        if (loggedUser && token) {
-            user.value = loggedUser;
+        if (token) {
             localStorage.setItem("token", token);
             
             return true;
@@ -36,7 +36,7 @@ export const useAuth = (): AuthHookProps => {
         return false;
     };
 
-    const logOut = () => {
+    const logOut = (): void => {
         user.value = null!;
         localStorage.removeItem("token");
     };
