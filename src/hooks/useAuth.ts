@@ -13,7 +13,7 @@ export const useAuth = (): AuthHookProps => {
     const user = ref<User | null>(null!);
     const isAuthenticated = computed(() => !!user.value)
 
-    const signUp = async (data: SignUpFormData) => {
+    const signUp = async (data: SignUpFormData): Promise<boolean> => {
         const signUpService = new SignUpService();
         const registry: APIResponse<User> = await signUpService.execute(data);
 
@@ -22,14 +22,13 @@ export const useAuth = (): AuthHookProps => {
         return registeredUser ? true : false;
     };
 
-    const logIn = async (data: LoginFormData) => {
+    const logIn = async (data: LoginFormData): Promise<boolean> => {
         const loginService = new LoginService();
         const login: APIResponse<AuthToken> = await loginService.execute(data);
 
-        const { user: loggedUser, token } = login.data
+        const { token } = login.data
 
-        if (loggedUser && token) {
-            user.value = loggedUser;
+        if (token) {
             localStorage.setItem("token", token);
             
             return true;
@@ -37,7 +36,7 @@ export const useAuth = (): AuthHookProps => {
         return false;
     };
 
-    const logOut = () => {
+    const logOut = (): void => {
         user.value = null!;
         localStorage.removeItem("token");
     };
