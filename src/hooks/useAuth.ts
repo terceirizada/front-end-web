@@ -6,6 +6,7 @@ import { LoginFormData } from "../types/login";
 import { LoginService } from "../api/domain/services/login-service";
 import { User } from "../types/user";
 import { AuthToken } from "../types/auth-token";
+import { APIResponse } from "../types/api";
 
 
 export const useAuth = (): AuthHookProps => {
@@ -14,7 +15,7 @@ export const useAuth = (): AuthHookProps => {
 
     const signUp = async (data: SignUpFormData) => {
         const signUpService = new SignUpService();
-        const registry = await signUpService.execute<User>(data);
+        const registry: APIResponse<User> = await signUpService.execute(data);
 
         const registeredUser = registry.data;
 
@@ -23,7 +24,7 @@ export const useAuth = (): AuthHookProps => {
 
     const logIn = async (data: LoginFormData) => {
         const loginService = new LoginService();
-        const login = await loginService.execute<AuthToken>(data);
+        const login: APIResponse<AuthToken> = await loginService.execute(data);
 
         const { user: loggedUser, token } = login.data
 

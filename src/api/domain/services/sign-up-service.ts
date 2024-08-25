@@ -1,10 +1,10 @@
 import { api } from "../../api"
 import { SignUpFormData } from "../../../types/sign-up"
-import { ApiResponse } from "../../../types/api-response";
+import { APIResponse } from "../../../types/api";
 
 export class SignUpService {
-    async execute<T>(data: Omit<SignUpFormData, 'confirmPassword'>): Promise<ApiResponse<T>> {
-        const response = await api.post<ApiResponse<T>>("/api/users/", data);
-        return response.data
+    async execute<T>(data: Omit<SignUpFormData, 'confirmPassword'>): Promise<APIResponse<T>> {
+        const response: APIResponse<T> = await api.post("/api/users/", data);
+        return response
     }
 }
