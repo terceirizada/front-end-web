@@ -1,10 +1,10 @@
-import axios from "axios"
+import { api } from "../../api"
 import { LoginFormData } from "../../../types/login";
-
+import {  APIResponse } from "../../../types/api";
 
 export class LoginService {
-    async execute(data: LoginFormData){
-        const reponse = await axios.post('/api/login', data);
-        return reponse
+    async execute<T>(data: LoginFormData): Promise<APIResponse<T>> {
+        const response: APIResponse<T> = await api.post('/api/login/', data);
+        return response
     }
 }

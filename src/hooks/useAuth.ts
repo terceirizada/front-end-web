@@ -1,33 +1,40 @@
 import { computed, ref } from "vue";
 import { SignUpFormData } from "../types/sign-up";
 import { SignUpService } from "../api/domain/services/sign-up-service";
-import { AuthProps } from "../types/auth";
+import { AuthHookProps } from "../types/auth-hook";
 import { LoginFormData } from "../types/login";
 import { LoginService } from "../api/domain/services/login-service";
 import { User } from "../types/user";
+import { AuthToken } from "../types/auth-token";
+import { APIResponse } from "../types/api";
+import { jwtDecode } from "jwt-decode";
+import { JwtPayload } from "../types/jwt-payload";
 
 
-export const useAuth = (): AuthProps => {
-    const user = ref<User>(null!);
+export const useAuth = (): AuthHookProps => {
+    const user = ref<User | null>(null);
     const isAuthenticated = computed(() => !!user.value)
 
-    const signUp = async (data: SignUpFormData) => {
+    const signUp = async (data: SignUpFormData): Promise<boolean> => {
         const signUpService = new SignUpService();
-        const registry = await signUpService.execute(data);
+        const registry: APIResponse<User> = await signUpService.execute(data);
 
         const registeredUser = registry.data;
 
         return registeredUser ? true : false;
     };
 
-    const logIn = async (data: LoginFormData) => {
+    const logIn = async (data: LoginFormData): Promise<boolean> => {
         const loginService = new LoginService();
-        const login = await loginService.execute(data);
+        const login: APIResponse<AuthToken> = await loginService.execute(data);
 
-        const { user, token } = login.data;
+        const { token } = login.data
+        const tokenPayload = jwtDecode<JwtPayload>(token)
 
-        if (user && token) {
-            user.value = user;
+        const { email } = tokenPayload
+
+        if (token && email) {
+            user.value = { email }
             localStorage.setItem("token", token);
             
             return true;
@@ -35,7 +42,7 @@ export const useAuth = (): AuthProps => {
         return false;
     };
 
-    const logOut = () => {
+    const logOut = (): void => {
         user.value = null!;
         localStorage.removeItem("token");
     };
