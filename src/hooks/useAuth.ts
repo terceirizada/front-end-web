@@ -7,10 +7,12 @@ import { LoginService } from "../api/domain/services/login-service";
 import { User } from "../types/user";
 import { AuthToken } from "../types/auth-token";
 import { APIResponse } from "../types/api";
+import { jwtDecode } from "jwt-decode";
+import { JwtPayload } from "../types/jwt-payload";
 
 
 export const useAuth = (): AuthHookProps => {
-    const user = ref<User | null>(null!);
+    const user = ref<User | null>(null);
     const isAuthenticated = computed(() => !!user.value)
 
     const signUp = async (data: SignUpFormData): Promise<boolean> => {
@@ -27,8 +29,12 @@ export const useAuth = (): AuthHookProps => {
         const login: APIResponse<AuthToken> = await loginService.execute(data);
 
         const { token } = login.data
+        const tokenPayload = jwtDecode<JwtPayload>(token)
 
-        if (token) {
+        const { email } = tokenPayload
+
+        if (token && email) {
+            user.value = { email }
             localStorage.setItem("token", token);
             
             return true;
