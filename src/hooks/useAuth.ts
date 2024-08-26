@@ -1,17 +1,18 @@
 import { computed, ref } from "vue";
 import { SignUpFormData } from "../types/sign-up";
 import { SignUpService } from "../api/domain/services/sign-up-service";
-import { AuthHookProps } from "../types/auth-hook";
+import { AuthHook } from "../types/auth-hook";
 import { LoginFormData } from "../types/login";
 import { LoginService } from "../api/domain/services/login-service";
-import { User } from "../types/user";
 import { AuthToken } from "../types/auth-token";
 import { APIResponse } from "../types/api";
 import { jwtDecode } from "jwt-decode";
 import { JwtPayload } from "../types/jwt-payload";
+import User from "../api/domain/models/user";
+import { Router } from "vue-router";
 
 
-export const useAuth = (): AuthHookProps => {
+export const useAuth = (): AuthHook => {
     const user = ref<User | null>(null);
     const isAuthenticated = computed(() => !!user.value)
 
@@ -34,7 +35,7 @@ export const useAuth = (): AuthHookProps => {
         const { email } = tokenPayload
 
         if (token && email) {
-            user.value = { email }
+            user.value = new User(email);
             localStorage.setItem("token", token);
             
             return true;
@@ -42,9 +43,10 @@ export const useAuth = (): AuthHookProps => {
         return false;
     };
 
-    const logOut = (): void => {
+    const logOut = async (router: Router) => {
         user.value = null!;
         localStorage.removeItem("token");
+        await router.push('/login')
     };
 
     return {

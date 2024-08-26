@@ -8,21 +8,33 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/vue";
-import { Search, AlignJustify, Bell, X,  CircleUser, Home } from "lucide-vue-next";
+import {
+  Search,
+  AlignJustify,
+  Bell,
+  X,
+  CircleUser,
+  Home,
+} from "lucide-vue-next";
 import ProcessesTable from "./ProcessesTable.vue";
 import AppLogo from "./AppLogo.vue";
+import { useAuth } from "../hooks/useAuth";
+import PrimaryButton from "./PrimaryButton.vue";
+import { useRouter } from "vue-router";
 
 const user = {
   name: "Nome do usuário",
-  email: "emaildousuario@example.com"
+  email: "emaildousuario@example.com",
 };
-const navigation = [
-  { name: "Home", href: "#", current: true }
-];
+const navigation = [{ name: "Home", href: "/flow", current: true }];
+
+const auth = useAuth();
+const router = useRouter();
+
 const userNavigation = [
-  { name: "Perfil", href: "#" },
-  { name: "Configurações", href: "#" },
-  { name: "Sair", href: "#" },
+  { name: "Perfil", action: () => {} },
+  { name: "Configurações", action: ()=> {} },
+  { name: "Sair", action: async () => await auth.logOut(router) },
 ];
 </script>
 <template>
@@ -35,7 +47,7 @@ const userNavigation = [
       >
         <div class="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
           <div
-            class="relative flex h-16 items-center justify-between lg:border-b lg:border-indigo-400 lg:border-opacity-25"
+            class="relative flex h-24 items-center justify-between lg:border-b lg:border-indigo-400 lg:border-opacity-25"
           >
             <div class="flex items-center px-2 lg:px-0">
               <div class="flex-shrink-0">
@@ -52,9 +64,11 @@ const userNavigation = [
                         ? 'text-indigo-600 text-lg font-bold'
                         : 'text-neutral-500 hover:bg-indigo-400 hover:bg-opacity-75',
                       'rounded-md py-2 px-3 text-sm font-bold',
-                    'flex gap-2 items-center']"
+                      'flex gap-2 items-center',
+                    ]"
                     :aria-current="item.current ? 'page' : undefined"
-                    > <Home :size="24"/> Home</a
+                  >
+                    <Home :size="24" /> Home</a
                   >
                 </div>
               </div>
@@ -102,7 +116,7 @@ const userNavigation = [
                       class="flex rounded-full text-sm text-neutral-500 hover:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600"
                     >
                       <span class="sr-only">Open user menu</span>
-                      <CircleUser :size="28"/>
+                      <CircleUser :size="28" />
                     </MenuButton>
                   </div>
                   <transition
@@ -121,14 +135,16 @@ const userNavigation = [
                         :key="item.name"
                         v-slot="{ active }"
                       >
-                        <a
-                          :href="item.href"
+                        <PrimaryButton
+                          :title="item.name"
                           :class="[
                             active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-gray-700',
+                            'block px-4 py-2 text-sm text-gray-700 w-full text-start',
                           ]"
-                          >{{ item.name }}</a
+                          @click="item.action"
                         >
+                          {{ item.name }}
+                        </PrimaryButton>
                       </MenuItem>
                     </MenuItems>
                   </transition>
@@ -158,19 +174,19 @@ const userNavigation = [
           <div class="border-t border-indigo-700 pb-3 pt-4">
             <div class="flex items-center px-5">
               <div class="flex-shrink-0">
-                <CircleUser :size="28"/>
+                <CircleUser :size="28" />
               </div>
               <div class="ml-3">
-                <div class="text-base font-medium text-white">
+                <div class="text-base font-medium text-black">
                   {{ user.name }}
                 </div>
-                <div class="text-sm font-medium text-indigo-300">
+                <div class="text-sm font-medium text-indigo-500">
                   {{ user.email }}
                 </div>
               </div>
               <button
                 type="button"
-                class="ml-auto flex-shrink-0 rounded-full bg-indigo-600 p-1 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600"
+                class="ml-auto flex-shrink-0 rounded-full p-1 text-neutral-500 hover:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600"
               >
                 <span class="sr-only">View notifications</span>
                 <Bell :size="24" />
@@ -181,8 +197,8 @@ const userNavigation = [
                 v-for="item in userNavigation"
                 :key="item.name"
                 as="a"
-                :href="item.href"
-                class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-indigo-500 hover:bg-opacity-75"
+                @click="item.action"
+                class="block rounded-md px-3 py-2 text-base font-medium text-neutral-500 hover:bg-indigo-500 hover:bg-opacity-75 cursor-pointer hover:text-neutral-100"
                 >{{ item.name }}</DisclosureButton
               >
             </div>

@@ -4,7 +4,7 @@ import LoginView from "../views/LoginView.vue";
 import SignUpView from "../views/SignUpView.vue";
 import MainView from "../views/MainView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
-import { AuthHookProps } from "../types/auth-hook";
+import { AuthHook } from "../types/auth-hook";
 import { useAuth } from "../hooks/useAuth";
 
 
@@ -18,6 +18,11 @@ const router = createRouter({
             children: [
                 {
                     path: '/',
+                    name: 'init',
+                    component: LoginView,
+                },
+                {
+                    path: '/login',
                     name: 'login',
                     component: LoginView,
                 },
@@ -46,8 +51,8 @@ const router = createRouter({
 })
 
 
-router.beforeEach((to, from, next) => {
-    const auth: AuthHookProps = useAuth()
+router.beforeEach((to, _from, next) => {
+    const auth: AuthHook = useAuth()
     
     if (to.meta.requiresAuth && !auth.isAuthenticated.value) {
         next({
