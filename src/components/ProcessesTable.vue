@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import Process from "../api/domain/models/process";
 import { GetProcessesService } from "../api/domain/services/get-processes-service";
 import { APIRequest } from "../types/api";
+import Process from "../api/domain/models/process";
 
-const getProcesses = async () => {
+const getProcesses = async (): Promise<Array<Process>> => {
   const getProcessesService = new GetProcessesService();
   const services: APIRequest<Array<Process>> =
     await getProcessesService.execute();
@@ -15,7 +15,15 @@ const processes = ref<Array<Process>>([]);
 
 onMounted(async () => {
   try {
-    processes.value = await getProcesses();
+    processes.value = (await getProcesses()).map(
+      (process) =>
+        new Process(
+          process.getResponsavel(),
+          process.getCandidato(),
+          process.getCargo(),
+          process.getStatus()
+        )
+    );
   } catch (error) {
     if (error instanceof Error) alert("Erro ao buscar processos.");
   }
@@ -126,8 +134,8 @@ function classNames(...classes: unknown[]) {
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
                 <tr
-                  v-for="process in processes"
-                  :key="process.getId()"
+                  v-for="(process, index) in processes"
+                  :key="index"
                   :class="{ 'bg-gray-50': selectedProcess.includes(process) }"
                 >
                   <td class="relative px-7 sm:w-12 sm:px-6">
@@ -168,6 +176,9 @@ function classNames(...classes: unknown[]) {
                 </tr>
               </tbody>
             </table>
+            <div v-if="processes.length === 0" class="w-full flex gap-4 text-neutral-500">
+              <p>Ainda não há processos.</p>
+            </div>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 export default class Process {
-    private id!: string;
+    private id!: string
     constructor(
         private responsavel: string,
         private candidato: string,
@@ -7,23 +7,23 @@ export default class Process {
         private status: string
     ) {}
 
-    getResponsavel(): string {
+    public getResponsavel(): string {
         return this.responsavel;
     }
 
-    getCandidato(): string {
+    public getCandidato(): string {
         return this.candidato;
     }
 
-    getCargo(): string {
+    public getCargo(): string {
         return this.cargo;
     }
 
-    getStatus(): string {
+    public getStatus(): string {
         return this.status;
     }
 
-    getId(): string{
+    public getId(): string{
         return this.id;
     }
     
