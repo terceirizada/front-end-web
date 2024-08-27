@@ -1,7 +1,7 @@
-import { User } from './user'
 import { LoginFormData } from './login';
 import { SignUpFormData } from './sign-up';
-import { ComputedRef } from 'vue';
+import User from '../api/domain/models/user'
+import { ComputedRef, Ref} from 'vue';
 import { Router } from 'vue-router'
 
 export type AuthHook = {

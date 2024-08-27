@@ -1,13 +1,21 @@
-export default class Process {
-    private id!: string
+import { BaseModel } from "./base-model";
+import User from "./user";
+
+export default class Process implements BaseModel{
     constructor(
-        private responsavel: string,
+        private id: string,
+        private responsavel: User,
         private candidato: string,
         private cargo: string,
         private status: string
     ) {}
 
-    public getResponsavel(): string {
+    // Override
+    public getId(): string{
+        return this.id;
+    }
+    
+    public getResponsavel(): User {
         return this.responsavel;
     }
 
@@ -22,10 +30,5 @@ export default class Process {
     public getStatus(): string {
         return this.status;
     }
-
-    public getId(): string{
-        return this.id;
-    }
-    
 
 }

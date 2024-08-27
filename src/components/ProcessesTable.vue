@@ -18,6 +18,7 @@ onMounted(async () => {
     processes.value = (await getProcesses()).map(
       (process) =>
         new Process(
+          process.getId(),
           process.getResponsavel(),
           process.getCandidato(),
           process.getCargo(),
