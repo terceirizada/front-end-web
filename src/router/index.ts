@@ -54,7 +54,7 @@ const router = createRouter({
 router.beforeEach((to, _from, next) => {
     const auth: AuthHook = useAuth()
     
-    if (to.meta.requiresAuth && !!auth.isAuthenticated.value) {
+    if (to.meta.requiresAuth && !auth.isAuthenticated.value) {
         next({
             path: '/',
             query: { redirect: to.fullPath },
