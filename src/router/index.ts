@@ -4,8 +4,7 @@ import LoginView from "../views/LoginView.vue";
 import SignUpView from "../views/SignUpView.vue";
 import MainView from "../views/MainView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
-import { AuthHook } from "../types/auth-hook";
-import { useAuth } from "../hooks/useAuth";
+
 
 
 const router = createRouter({
@@ -35,9 +34,6 @@ const router = createRouter({
                     path: '/flow',
                     name: 'main-view',
                     component: MainView,
-                    meta: {
-                        requiresAuth: true
-                    }
                 },
                 {
                     path: '/:catchAll(.*)',
@@ -49,20 +45,5 @@ const router = createRouter({
 
     ]
 })
-
-
-router.beforeEach((to, _from, next) => {
-    const auth: AuthHook = useAuth()
-    
-    if (to.meta.requiresAuth && !!auth.isAuthenticated.value) {
-        next({
-            path: '/',
-            query: { redirect: to.fullPath },
-        })
-    } else {
-        next()
-    }
-})
-
 
 export default router

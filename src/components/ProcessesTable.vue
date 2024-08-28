@@ -6,16 +6,17 @@ import Process from "../api/domain/models/process";
 
 const getProcesses = async (): Promise<Array<Process>> => {
   const getProcessesService = new GetProcessesService();
-  const services: APIRequest<Array<Process>> =
-    await getProcessesService.execute();
-  return services.data;
+  const services: APIRequest<Array<Process>> = await getProcessesService.execute();
+  return services.data.data;
 };
 
 const processes = ref<Array<Process>>([]);
 
 onMounted(async () => {
   try {
-    processes.value = (await getProcesses()).map(
+    const allProcesses = await getProcesses()
+    
+    processes.value = allProcesses.map(
       (process) =>
         new Process(
           process.getId(),
@@ -26,7 +27,8 @@ onMounted(async () => {
         )
     );
   } catch (error) {
-    if (error instanceof Error) alert("Erro ao buscar processos.");
+    if (error instanceof Error) 
+    alert(error.message);
   }
 });
 

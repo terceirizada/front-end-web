@@ -1,4 +1,4 @@
-import { computed, Ref, ref } from "vue";
+import { Ref, ref } from "vue";
 import { SignUpFormData } from "../types/sign-up";
 import { SignUpService } from "../api/domain/services/sign-up-service";
 import { AuthHook } from "../types/auth-hook";
@@ -14,13 +14,13 @@ import { Router } from "vue-router";
 
 export const useAuth = (): AuthHook => {
     const user = ref<User | null>(null) as Ref<User | null>;
-    const isAuthenticated = computed(() => !!user.value)
+    const isAuthenticated = ref<boolean>(false)
 
     const signUp = async (data: SignUpFormData): Promise<boolean> => {
         const signUpService = new SignUpService();
         const registry: APIResponse<User> = await signUpService.execute(data);
-        
-        if(registry) {
+
+        if (registry) {
             user.value = registry.data
         }
 
@@ -42,8 +42,9 @@ export const useAuth = (): AuthHook => {
             const loggedUser = new User()
             loggedUser.setEmail(email)
             user.value = loggedUser
+            isAuthenticated.value = true
             localStorage.setItem("token", token);
-            
+
             return true;
         }
         return false;
@@ -51,6 +52,7 @@ export const useAuth = (): AuthHook => {
 
     const logOut = async (router: Router) => {
         user.value = null!;
+        isAuthenticated.value = false;
         localStorage.removeItem("token");
         await router.push('/login')
     };

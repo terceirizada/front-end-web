@@ -10,6 +10,9 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { LoginFormData } from "../types/login";
 import InputErrorMessage from "./InputErrorMessage.vue";
 import { useAuth } from "../hooks/useAuth";
+import { onMounted } from "vue";
+import { jwtDecode } from "jwt-decode";
+import { JwtPayload } from "../types/jwt-payload";
 
 const validationSchema = toTypedSchema(
   z.object({
@@ -37,13 +40,28 @@ const { value: password, errorMessage: passwordError } =
 const auth = useAuth();
 const router = useRouter();
 
+onMounted(()=>{
+  const token = localStorage.getItem('token');
+    if (token) {
+        auth.isAuthenticated.value = true;
+        const { email } = jwtDecode<JwtPayload>(token)
+        auth.user.value?.setEmail(email)
+        router.push('/flow')
+    }else{
+      router.push('/')
+    }
+})
+
 const handleLogin = async (data: LoginFormData) => {
   try {
     const isLogged = await auth.logIn(data);
-
+    console.log('logged in', isLogged);
+    console.log('isAuthenticated', auth.isAuthenticated.value);
+    
+    
     if (isLogged) {
-      router.push("/flow");
       alert("Login realizado com sucesso!");
+      router.push("/flow");
     }
   } catch (error) {
     if(error instanceof Error)
