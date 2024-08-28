@@ -13,6 +13,7 @@ import { useAuth } from "../hooks/useAuth";
 import { onMounted } from "vue";
 import { jwtDecode } from "jwt-decode";
 import { JwtPayload } from "../types/jwt-payload";
+import { AxiosError } from "axios";
 
 const validationSchema = toTypedSchema(
   z.object({
@@ -60,8 +61,8 @@ const handleLogin = async (data: LoginFormData) => {
       router.push("/flow");
     }
   } catch (error) {
-    if(error instanceof Error)
-    if(error.response.status === 404){
+    if(error instanceof AxiosError)
+    if(error.response && error.response.status === 404){
       alert('Usuário não encontrado.')
     }else{
       alert('Erro ao realizar login.')

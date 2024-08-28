@@ -11,6 +11,7 @@ import InputErrorMessage from "./InputErrorMessage.vue";
 import SpinnerLoader from "./SpinnerLoader.vue";
 import { useRouter } from 'vue-router'
 import { useAuth } from "../hooks/useAuth";
+import { AxiosError } from "axios";
 
 const validationSchema = toTypedSchema(
   z.object({
@@ -54,12 +55,12 @@ const handleSignUp = async (data: SignUpFormData) => {
         alert('Cadastro realizado com sucesso!')
       }
   } catch (error) {
-    if (error instanceof Error)
-    if(error instanceof Error)
-    if(error.response.status === 409){
-      alert('Usuário já existe.')
-    }else{
-      alert('Erro ao realizar cadastro.')
+    if(error instanceof AxiosError){
+      if(error.response && error.response.status === 409){
+        alert('Usuário já existe.')
+      }else{
+        alert('Erro ao realizar cadastro.')
+      }
     }
   }
 }
