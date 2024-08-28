@@ -1,18 +1,24 @@
 import { BaseModel } from "./base-model";
 
 export default class User implements BaseModel{
-    constructor(
-        private id?: string,
-        private email?: string
-    ){}
+    private id: string | undefined;
+    private email: string | undefined;
 
     // Override
-    getId(): string | undefined {
+    getId(): string | undefined{
         return this.id
     }
     
     getEmail(): string | undefined{
         return this.email
-    }   
+    }
+
+    setId(id: string){
+        this.id = id
+    }
+
+    setEmail(email: string){
+        this.email = email
+    }
 
 }

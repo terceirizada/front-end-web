@@ -4,7 +4,7 @@ import {  APIResponse } from "../../../types/api";
 
 export class LoginService {
     async execute<T>(data: LoginFormData): Promise<APIResponse<T>> {
-        const response: APIResponse<T> = await api.post('/api/login/', data);
+        const response: APIResponse<T> = await api.post('/api/auth/', data);
         return response
     }
 }

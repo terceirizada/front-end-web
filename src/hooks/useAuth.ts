@@ -1,4 +1,4 @@
-import { computed, ref } from "vue";
+import { computed, Ref, ref } from "vue";
 import { SignUpFormData } from "../types/sign-up";
 import { SignUpService } from "../api/domain/services/sign-up-service";
 import { AuthHook } from "../types/auth-hook";
@@ -13,12 +13,16 @@ import { Router } from "vue-router";
 
 
 export const useAuth = (): AuthHook => {
-    const user = ref<User | null>(null);
+    const user = ref<User | null>(null) as Ref<User | null>;
     const isAuthenticated = computed(() => !!user.value)
 
     const signUp = async (data: SignUpFormData): Promise<boolean> => {
         const signUpService = new SignUpService();
         const registry: APIResponse<User> = await signUpService.execute(data);
+        
+        if(registry) {
+            user.value = registry.data
+        }
 
         const registeredUser = registry.data;
 
@@ -35,7 +39,9 @@ export const useAuth = (): AuthHook => {
         const { email } = tokenPayload
 
         if (token && email) {
-            user.value = new User(email);
+            const loggedUser = new User()
+            loggedUser.setEmail(email)
+            user.value = loggedUser
             localStorage.setItem("token", token);
             
             return true;
