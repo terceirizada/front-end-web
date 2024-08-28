@@ -57,7 +57,7 @@ const onSubmit = handleSubmit(handleLogin);
 <template>
   <form data-testid="login-form" className="space-y-6" @submit="onSubmit">
     <div>
-      <FormLabel htmlFor="email" text="Email" />
+      <FormLabel htmlFor="email" text="Email" data-testid="email-label"/>
       <div className="mt-2">
         <FormInput
           id="email"
