@@ -32,7 +32,7 @@ export const useAuth = (): AuthHook => {
     const logIn = async (data: LoginFormData): Promise<boolean> => {
         const loginService = new LoginService();
         const login: APIResponse<AuthToken> = await loginService.execute(data);
-
+        
         const { token } = login.data
         const tokenPayload = jwtDecode<JwtPayload>(token)
 

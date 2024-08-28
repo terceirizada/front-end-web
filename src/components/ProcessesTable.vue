@@ -21,9 +21,11 @@ onMounted(async () => {
     processes.value = allProcesses.map(
       (process) => new Process(process.id, process.responsavel, process.candidato, process.cargo, process.status)
     );
+
   } catch (error) {
     if (error instanceof Error) 
-    alert(error.message);
+    console.error(error.message);
+    
   }finally{
     isFetching.value = false;
   }

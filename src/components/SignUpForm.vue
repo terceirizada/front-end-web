@@ -55,7 +55,12 @@ const handleSignUp = async (data: SignUpFormData) => {
       }
   } catch (error) {
     if (error instanceof Error)
-    alert(error.message)
+    if(error instanceof Error)
+    if(error.response.status === 409){
+      alert('Usuário já existe.')
+    }else{
+      alert('Erro ao realizar cadastro.')
+    }
   }
 }
 

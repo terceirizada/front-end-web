@@ -19,7 +19,10 @@ onMounted(()=>{
       router.push('/')
     }
 })
+
 </script>
 <template>
-    <ProcessesDashboard data-testid="main" v-if="auth.isAuthenticated.value"/>
+  <div data-testid="main">
+    <ProcessesDashboard v-if="auth.isAuthenticated.value"/>
+  </div>
 </template>

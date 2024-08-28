@@ -55,17 +55,17 @@ onMounted(()=>{
 const handleLogin = async (data: LoginFormData) => {
   try {
     const isLogged = await auth.logIn(data);
-    console.log('logged in', isLogged);
-    console.log('isAuthenticated', auth.isAuthenticated.value);
-    
-    
     if (isLogged) {
       alert("Login realizado com sucesso!");
       router.push("/flow");
     }
   } catch (error) {
     if(error instanceof Error)
-    alert(error.message);
+    if(error.response.status === 404){
+      alert('Usuário não encontrado.')
+    }else{
+      alert('Erro ao realizar login.')
+    }
   }
 };
 

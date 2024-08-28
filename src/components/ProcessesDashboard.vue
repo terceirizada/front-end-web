@@ -14,22 +14,36 @@ import {
   Bell,
   X,
   CircleUser,
-  Home,
+  Home
 } from "lucide-vue-next";
 import ProcessesTable from "./ProcessesTable.vue";
 import AppLogo from "./AppLogo.vue";
 import { useAuth } from "../hooks/useAuth";
 import PrimaryButton from "./PrimaryButton.vue";
 import { useRouter } from "vue-router";
-
-const user = {
-  name: "Nome do usuário",
-  email: "emaildousuario@example.com",
-};
-const navigation = [{ name: "Home", href: "/flow", current: true }];
+import {onMounted} from "vue"
+import {jwtDecode} from "jwt-decode"
+import {JwtPayload} from "../types/jwt-payload"
+import User from "../api/domain/models/user";
 
 const auth = useAuth();
 const router = useRouter();
+
+onMounted(()=>{
+  const token = localStorage.getItem('token');
+    if (token) {
+        auth.isAuthenticated.value = true;
+        const { email } = jwtDecode<JwtPayload>(token)
+        const user = new User()
+        user.setEmail(email)
+        auth.user.value = user        
+    }else{
+      router.push('/')
+    }
+})
+
+const navigation = [{ name: "Home", href: "/flow", current: true }];
+
 
 const userNavigation = [
   { name: "Perfil", action: () => {} },
@@ -177,11 +191,11 @@ const userNavigation = [
                 <CircleUser :size="28" />
               </div>
               <div class="ml-3">
-                <div class="text-base font-medium text-black">
-                  {{ user.name }}
+                <div class="text-sm font-medium text-indigo-500">
+                  {{ auth.user.value?.email }}
                 </div>
                 <div class="text-sm font-medium text-indigo-500">
-                  {{ user.email }}
+                  
                 </div>
               </div>
               <button
