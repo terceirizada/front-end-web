@@ -3,11 +3,11 @@ import User from "./user";
 
 export default class Process implements BaseModel{
     constructor(
-        private id: string,
-        private responsavel: User,
-        private candidato: string,
-        private cargo: string,
-        private status: string
+        public id: string,
+        public responsavel: User,
+        public candidato: string,
+        public cargo: string,
+        public status: string
     ) {}
 
     // Override

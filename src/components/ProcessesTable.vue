@@ -3,6 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import { GetProcessesService } from "../api/domain/services/get-processes-service";
 import { APIRequest } from "../types/api";
 import Process from "../api/domain/models/process";
+import SpinnerLoader from "./SpinnerLoader.vue";
 
 const getProcesses = async (): Promise<Array<Process>> => {
   const getProcessesService = new GetProcessesService();
@@ -11,24 +12,20 @@ const getProcesses = async (): Promise<Array<Process>> => {
 };
 
 const processes = ref<Array<Process>>([]);
+const isFetching = ref<boolean>(true);
 
 onMounted(async () => {
   try {
     const allProcesses = await getProcesses()
     
     processes.value = allProcesses.map(
-      (process) =>
-        new Process(
-          process.getId(),
-          process.getResponsavel(),
-          process.getCandidato(),
-          process.getCargo(),
-          process.getStatus()
-        )
+      (process) => new Process(process.id, process.responsavel, process.candidato, process.cargo, process.status)
     );
   } catch (error) {
     if (error instanceof Error) 
     alert(error.message);
+  }finally{
+    isFetching.value = false;
   }
 });
 
@@ -165,7 +162,7 @@ function classNames(...classes: unknown[]) {
                       )
                     "
                   >
-                    {{ process.getResponsavel() }}
+                    {{ process.responsavel.email }}
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                     {{ process.getCandidato() }}
@@ -179,7 +176,8 @@ function classNames(...classes: unknown[]) {
                 </tr>
               </tbody>
             </table>
-            <div v-if="processes.length === 0" class="w-full flex gap-4 text-neutral-500">
+            <SpinnerLoader v-if="isFetching"/>
+            <div v-if="processes.length === 0 && !isFetching" class="w-full flex gap-4 text-neutral-500">
               <p>Ainda não há processos.</p>
             </div>
           </div>

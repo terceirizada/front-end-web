@@ -1,8 +1,8 @@
 import { BaseModel } from "./base-model";
 
 export default class User implements BaseModel{
-    private id: string | undefined;
-    private email: string | undefined;
+    public id: string | undefined;
+    public email: string | undefined;
 
     // Override
     getId(): string | undefined{
