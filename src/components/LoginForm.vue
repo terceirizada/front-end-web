@@ -10,6 +10,10 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { LoginFormData } from "../types/login";
 import InputErrorMessage from "./InputErrorMessage.vue";
 import { useAuth } from "../hooks/useAuth";
+import { onMounted } from "vue";
+import { jwtDecode } from "jwt-decode";
+import { JwtPayload } from "../types/jwt-payload";
+import { AxiosError } from "axios";
 
 const validationSchema = toTypedSchema(
   z.object({
@@ -37,17 +41,32 @@ const { value: password, errorMessage: passwordError } =
 const auth = useAuth();
 const router = useRouter();
 
+onMounted(()=>{
+  const token = localStorage.getItem('token');
+    if (token) {
+        auth.isAuthenticated.value = true;
+        const { email } = jwtDecode<JwtPayload>(token)
+        auth.user.value?.setEmail(email)
+        router.push('/flow')
+    }else{
+      router.push('/')
+    }
+})
+
 const handleLogin = async (data: LoginFormData) => {
   try {
     const isLogged = await auth.logIn(data);
-
     if (isLogged) {
-      router.push("/flow");
       alert("Login realizado com sucesso!");
+      router.push("/flow");
     }
   } catch (error) {
-    if(error instanceof Error)
-    alert(error.message);
+    if(error instanceof AxiosError)
+    if(error.response && error.response.status === 404){
+      alert('Usuário não encontrado.')
+    }else{
+      alert('Erro ao realizar login.')
+    }
   }
 };
 
@@ -57,7 +76,7 @@ const onSubmit = handleSubmit(handleLogin);
 <template>
   <form data-testid="login-form" className="space-y-6" @submit="onSubmit">
     <div>
-      <FormLabel htmlFor="email" text="Email" />
+      <FormLabel htmlFor="email" text="Email" data-testid="email-label"/>
       <div className="mt-2">
         <FormInput
           id="email"
